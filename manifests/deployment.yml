@@ -1,0 +1,16 @@
+apiVersion : apps/v1beta1
+kind: Deployment
+metadata:
+  name: bbadshoppingtest 
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: bbadshoppingtest 
+    spec:
+      containers:
+        - name: bbadshoppingtest 
+          image: testdevopstest.azurecr.io/bbadshoppingtest
+          ports:
+          - containerPort: 80
