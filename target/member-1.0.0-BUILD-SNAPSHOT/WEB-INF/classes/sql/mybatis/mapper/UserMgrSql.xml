@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sptek.userMgrSql.mapper">
+				   
+	<resultMap id="ClientUserInfo" type="ClientUserInfo">
+		<result property="id"				column="id" />
+		<result property="userId"			column="user_id" />
+		<result property="userNm"			column="user_nm" />
+		<result property="userPwd"			column="user_pwd" />
+		<result property="userMail"			column="user_mail" />
+		<result property="userSms"			column="user_sms" />
+		<result property="totalNum"			column="total_num" />
+	</resultMap>
+	
+	
+	<!-- USER INFO -->
+	<insert id="insertUserInfo" parameterType="UserInfo">
+    	INSERT INTO USER_MGR_INFO(USER_ID, USER_NM, USER_PWD, USER_MAIL, USER_SMS)
+    	VALUES (#{userId}, #{userNm}, #{md5UserPwd}, #{userMail}, #{userSms} )    
+    </insert>
+    
+    <select id="selectListUserInfo" parameterType="Condition" resultMap="UserInfo" >
+    	SELECT 
+    		ID, 
+    		USER_ID, 
+    		USER_NM, 
+    		USER_PWD, 
+    		USER_MAIL, 
+    		USER_SMS
+    	FROM USER_MGR_INFO
+    	WHERE 1 = 1
+    	 <if test="userId != null and userId != ''">
+    		AND USER_ID = #{userId}
+    	 </if>
+    	 <if test="userMail != null and userMail != ''">
+    		AND USER_MAIL = #{userMail}
+    	 </if>
+    	 <if test="userSms != null and userSms != ''">
+    		AND USER_SMS = #{userSms}
+    	 </if>
+    	 ORDER BY ID DESC
+        LIMIT #{showArticleLimit} OFFSET #{pageOffset};
+    </select>
+    
+    <select id="selectUserInfo" parameterType="Condition" resultMap="UserInfo" >
+    	SELECT 
+    		ID, 
+    		USER_ID, 
+    		USER_NM, 
+    		USER_PWD, 
+    		USER_MAIL, 
+    		USER_SMS
+    	FROM USER_MGR_INFO
+    	WHERE 1 = 1
+    	<if test="userId != null and userId != ''">
+    		AND USER_ID = #{userId}
+    	 </if>
+    	 <if test="md5UserPwd != null and md5UserPwd != ''">
+    		AND USER_PWD = #{md5UserPwd}
+    	 </if>
+    	<if test="id != null and id > 0 ">
+    		AND ID = #{id}
+    	 </if>
+    	;
+    </select>    
+    
+    <update id="updateUserInfo" parameterType="UserInfo"  >
+    	UPDATE USER_MGR_INFO SET 
+    		USER_NM = #{userNm},
+    		USER_ID = #{userId}, 
+    		USER_SMS = #{md5UserPwd},
+    		USER_MAIL = #{userMail},
+    		USER_SMS = #{userSms}
+    	WHERE ID = #{id}
+    	;
+    </update>
+    
+     <delete id="deleteUserInfo" parameterType="Condition"  >
+    	DELETE FROM USER_MGR_INFO 
+    		WHERE ID = #{id}
+    	;
+    </delete>
+    
+    <select id="getUserInfoTotalNum" parameterType="Condition" resultMap="UserInfo">
+	    SELECT
+	      	count(*) as total_num					
+	    FROM USER_MGR_INFO
+    	WHERE 1 = 1
+    	 <if test="userId != null and userId != ''">
+    		AND USER_ID = #{userId}
+    	 </if>
+    	 <if test="userMail != null and userMail != ''">
+    		AND USER_MAIL = #{userMail}
+    	 </if>
+    	 <if test="userSms != null and userSms != ''">
+    		AND USER_SMS = #{userSms}
+    	 </if>
+    	 ;
+    </select>
+    
+    
+    <!-- CHECK SVR INFO -->
+	<insert id="insertSvrInfo" parameterType="SvrInfo">
+    	INSERT INTO CHECK_SVR_INFO(IP_INFO, TYPE, DESC)
+    	VALUES (#{ipInfo}, #{svrType}, #{svrDesc} )    
+    </insert>
+    
+    <select id="selectListSvrInfo" parameterType="Condition" resultMap="SvrInfo" >
+    	SELECT 
+    		ID, 
+    		IP_INFO, 
+    		TYPE, 
+    		DESC
+    	FROM CHECK_SVR_INFO
+    	WHERE 1 = 1
+    	 <if test="ipInfo != null and ipInfo != ''">
+    		AND IP_INFO = #{ipInfo}
+    	 </if>
+    	 <if test="svrType != 0">
+    		AND TYPE = #{svrType}
+    	 </if>
+    	 <if test="svrDesc != null and svrDesc != ''">
+    		AND DESC = #{svrDesc}
+    	 </if>
+    	 ORDER BY ID DESC
+        LIMIT #{showArticleLimit} OFFSET #{pageOffset};
+    </select>
+    
+    <select id="selectListAllSvrInfo" resultMap="SvrInfo" >
+    	SELECT 
+    		ID, 
+    		IP_INFO, 
+    		TYPE, 
+    		DESC
+    	FROM CHECK_SVR_INFO
+    	 ORDER BY ID DESC
+        ;
+    </select>    
+    
+    <select id="selectSvrInfo" parameterType="Condition" resultMap="SvrInfo" >
+    	SELECT 
+    		ID, 
+    		IP_INFO, 
+    		TYPE, 
+    		DESC
+    	FROM CHECK_SVR_INFO
+    	WHERE ID = #{id}
+    	;
+    </select>    
+    
+    <update id="updateSvrInfo" parameterType="SvrInfo"  >
+    	UPDATE CHECK_SVR_INFO SET 
+    		IP_INFO = #{ipInfo}, 
+    		TYPE = #{svrType},
+    		DESC = #{svrDesc}
+    	WHERE ID = #{id}
+    	;
+    </update>
+    
+     <delete id="deleteSvrInfo" parameterType="Condition"  >
+    	DELETE FROM CHECK_SVR_INFO 
+    		WHERE ID = #{id}
+    	;
+    </delete>
+    
+    <select id="getSvrInfoTotalNum" parameterType="Condition" resultMap="SvrInfo">
+	    SELECT
+	      	count(*) as total_num					
+	    FROM CHECK_SVR_INFO
+    	WHERE 1 = 1
+    	  <if test="ipInfo != null and ipInfo != ''">
+    		AND IP_INFO = #{ipInfo}
+    	 </if>
+    	 <if test="svrType != null and svrType != ''">
+    		AND TYPE = #{svrType}
+    	 </if>
+    	 <if test="svrDesc != null and svrDesc != ''">
+    		AND DESC = #{svrDesc}
+    	 </if>
+    	 ;
+    </select>
+    
+    
+	<!-- SYS LIMIT INFO -->
+	<insert id="insertLimitInfo" parameterType="LimitInfo">
+    	INSERT INTO SYS_LIMIT_INFO(CPU_USAGE, MEM_USAGE, DISK_USAGE)
+    	VALUES (#{cpuUsage}, #{memUsage}, #{diskUsage} )    
+    </insert>
+    
+    <select id="selectLimitInfo" parameterType="Condition" resultMap="LimitInfo" >
+    	SELECT 
+    		ID, 
+    		CPU_USAGE, 
+    		MEM_USAGE, 
+    		DISK_USAGE
+    	FROM SYS_LIMIT_INFO
+    	;
+    </select>   
+    
+    <select id="selectListLimitInfo" parameterType="Condition" resultMap="LimitInfo" >
+    	SELECT 
+    		ID, 
+    		CPU_USAGE, 
+    		MEM_USAGE, 
+    		DISK_USAGE
+    	FROM SYS_LIMIT_INFO
+    	 ORDER BY ID DESC
+        LIMIT #{showArticleLimit} OFFSET #{pageOffset};
+    </select> 
+    
+    <update id="updateLimitInfo" parameterType="LimitInfo"  >
+    	UPDATE SYS_LIMIT_INFO SET 
+    		CPU_USAGE = #{cpuUsage}, 
+    		MEM_USAGE = #{memUsage},
+    		DISK_USAGE = #{diskUsage}
+    	;
+    </update>
+    
+     <delete id="deleteLimitInfo" parameterType="Condition"  >
+    	DELETE FROM SYS_LIMIT_INFO 
+    	;
+    </delete>
+	
+</mapper>
