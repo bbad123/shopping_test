@@ -1,7 +1,7 @@
 #FROM tomcat:8.5.46-jdk8-openjdk
 FROM maven:3.6.3-jdk-8-slim AS build
-COPY src /home/app/src
-COPY pom.xml /home/app
+COPY shopping_test/src /home/app/src
+COPY shopping_test/pom.xml /home/app
 RUN mvn -f /home/app/pom.xml clean package
  # Package stage #
 FROM java:openjdk-8-jdk
